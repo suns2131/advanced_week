@@ -5,7 +5,6 @@ import Header from "./Headers";
 const Main = () => {
     return (
         <div>
-            <Header />
             <Calendars />
         </div>
         
