@@ -1,49 +1,52 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 const Post_content = (props) => {
-    const Post_state = props.post_direction;
+    const Post_state = props.post_list;
+    if(Post_state == null) return;
+    console.log(Post_state.content_layout)
 
-    if(Post_state === 'left')
+    if(Post_state.content_layout === 'left')
     {
         return (
             <Post_contnet_design>
             <div className="content_box"> 
             <div className="left_box">
-                <img className="img_area" src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"/>
+                <img className="img_area" src={Post_state.image_src}/>
             </div>
             <div className="right_box">
-                <p className="text_area">text Box</p>
+                <p className="text_area">{Post_state.content}</p>
             </div>
             </div>
             </Post_contnet_design>
         );
     }
-    else if(Post_state ==='right')
+    else if(Post_state.content_layout ==='right')
     {   
         return (
             <Post_contnet_design>
             <div className="content_box"> 
             <div className="left_box">
-                <p className="text_area">text Box</p>
+                <p className="text_area">{Post_state.content}</p>
             </div>
             <div className="right_box">
-                <img className="img_area" src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"/>
+                <img className="img_area" src={Post_state.image_src}/>
             </div>
             </div>
             </Post_contnet_design>
         );
     }
-    else if(Post_state === 'center')
+    else if(Post_state.content_layout === 'center')
     {
         return(
             <Post_contnet_design>
             <div className="content_box2"> 
             <div className="top_box">
-                <p className="text_area">text Box</p>
+                <p className="text_area">{Post_state.content}</p>
             </div>
             <div className="bottom_box">
-                <img className="img_area" src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"/>
+                <img className="img_area" src={Post_state.image_src}/>
             </div>
             </div>
             </Post_contnet_design>     

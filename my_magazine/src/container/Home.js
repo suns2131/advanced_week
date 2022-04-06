@@ -8,10 +8,19 @@ import EditIcon from '@mui/icons-material/Edit';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { fontSize } from "@mui/system";
 import { useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import {actionCreators as postActions} from '../redux/modules/set_post'
 
 const Home = () => {
-    const data_state = ['left','right','center','center','center'];
+    const data_state = useSelector((state) => state.post.list);
+    const dispatch = useDispatch();
     const history_menu = useHistory();
+    console.log('data_state');
+    console.log(data_state);
+
+    React.useEffect(()=>{
+        dispatch(postActions.getPostFB());
+    },[])
 
     const floating_action = () => {
         history_menu.push('/Post')
@@ -23,7 +32,7 @@ const Home = () => {
             <Header_menu />
             {data_state.map((el,idx) => {
                 return (
-                    <Post_card post_direction = {el}/>
+                    <Post_card post_list = {el} />
                 );
             })
             }

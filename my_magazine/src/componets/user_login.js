@@ -1,17 +1,33 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputAdornment from '@mui/material/InputAdornment';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import Visibility from '@mui/icons-material/Visibility';
+import { getCookie,setCookie,delCookie } from "../shared/Cookie";
+import { useDispatch } from "react-redux";
+import { actionCreators as userActions } from "../redux/modules/set_user";
 
 const User_login = () => {
+    const dispatch = useDispatch();
+    const [id,setid] = useState('');
+    const [pwd,setpwd] = useState('');
+    const [btnactive,setbtnactive] = useState(true);
+
+    const login = () => {
+        console.log(id)
+        console.log(pwd)
+        dispatch(userActions.loginFB(id,pwd));
+    }
+
+    const chk_active=() =>{
+        console.log('id :' + id)
+        console.log('pwd :' + pwd)
+        if(id.length == "" && pwd == "")
+            setbtnactive(true);
+        else
+            setbtnactive(false);
+    }
+
     return (
         <Login_content_design>
         <div className="Back_area"> 
@@ -28,23 +44,25 @@ const User_login = () => {
                         noValidate
                         autoComplete="off"
                         >
-                        <TextField id="outlined-basic" label="아이디" variant="outlined" />
+                        <TextField id="outlined-basic" label="아이디" variant="outlined" onChange={(e)=> {setid(e.target.value);  chk_active(); }} />
                     </Box>
                 </div>
                 <div className="Pwd_area"> 
                     <TextField
                          sx={{
-                            '& > :not(style)': { m: 1, width: '60ch' },
+                            '& > :not(style)': { m: 1, width: '58ch' },
                         }}
                         id="outlined-password-input"
                         label="패스워드"
                         type="password"
                         autoComplete="current-password"
+                        onChange={(e)=> {setpwd(e.target.value); chk_active();}}
                     />
                 </div>
-                <div className="Button_area">
-                    <Button variant="contained" disableElevation sx={{fontSize : 20, width : '47ch', height : 50}}>회원가입</Button>
+                <div className="Button_area" >
+                    <Button onClick={login} disabled = {btnactive} variant="contained" disableElevation sx={{fontSize : 20, width : '47ch', height : 70}}>로그인</Button>
                 </div>
+                
             </div>
         </div>
         </Login_content_design>
@@ -77,6 +95,7 @@ const Login_content_design = styled.div`
     .Pwd_area{
         margin-top : 20px;
         margin-left: 20px;
+        
     }
     .Button_area{
         margin-top : 50px;

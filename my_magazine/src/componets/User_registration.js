@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -10,8 +10,40 @@ import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Visibility from '@mui/icons-material/Visibility';
+import {useDispatch}from 'react-redux'
+ import {actionCreators as userActions} from '../redux/modules/set_user'
 
 const User_Registration = () => {
+    const dispatch = useDispatch();
+    const [id,setId] = useState('');
+    const [pwd,setPwd] = useState('');
+    const [pwd_confirm,setPwdconfirm] = useState('');
+    const [nicknm, setNicknm] = useState('');
+
+    const Signup_click = () => {
+        console.log('id : ' + id)
+        console.log('nicknm : ' + nicknm)
+        console.log('pwd : ' + pwd)
+        console.log('pwd_confirm : ' + pwd_confirm)
+        const id_regex = /^[0-9z-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+        if(!id_regex.test(id) )
+        {
+            window.alert('ID 형식이 이메일형식이 아니에요 ') ;
+            return ;
+        }    
+        else if(nicknm === '')
+        {
+            window.alert('닉네임을 입력해주세요 ');
+            return;
+        }
+        else if(pwd !== pwd_confirm)
+        {
+            window.alert('패스워드, 패스워드 확인의 값이 달라요!');
+            return;
+        }
+        dispatch(userActions.signupFB(id,pwd,nicknm))
+    }
+
     return (
         <User_registration_design>
         <div className="Back_area"> 
@@ -28,7 +60,7 @@ const User_Registration = () => {
                         noValidate
                         autoComplete="off"
                         >
-                        <TextField id="outlined-basic" label="아이디" variant="outlined" />
+                        <TextField id="outlined-basic" label="아이디" variant="outlined" onChange={(e) => {setId(e.target.value);}} />
                     </Box>
                 </div>
                 <div className="nick_area"> 
@@ -40,7 +72,7 @@ const User_Registration = () => {
                         noValidate
                         autoComplete="off"
                         >
-                        <TextField id="outlined-basic" label="닉네임" variant="outlined" />
+                        <TextField id="outlined-basic" label="닉네임" variant="outlined" onChange={(e) => {setNicknm(e.target.value)}} />
                     </Box>
                 </div>
                 <div className="Pwd_area"> 
@@ -48,42 +80,34 @@ const User_Registration = () => {
                         <InputLabel htmlFor="outlined-adornment-password">패스워드</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-password"
-                                // type={values.showPassword ? 'text' : 'password'}
-                                // value={values.password}
-                                // onChange={handleChange('password')}
+                                 type='password'
+                                 onChange={(e) => {setPwd(e.target.value)}}
                                 endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton
                                     aria-label="toggle password visibility"
-                                    // onClick={handleClickShowPassword}
-                                    // onMouseDown={handleMouseDownPassword}
                                     edge="end"
                                     >
-                                    {/* {values.showPassword ? <VisibilityOff /> : <Visibility />} */}
                                     </IconButton>
                                 </InputAdornment>
                                 }
                                 label="Password"
                             />
-                    </FormControl>
+                    </FormControl>     
                 </div>
                 <div className="Pwdconfirm_area"> 
                     <FormControl sx={{ m: 1, width: '60ch' }} variant="outlined">
                         <InputLabel htmlFor="outlined-adornment-password">패스워드 확인</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-password"
-                                // type={values.showPassword ? 'text' : 'password'}
-                                // value={values.password}
-                                // onChange={handleChange('password')}
+                                 type='password'
+                                 onChange={(e) => {setPwdconfirm(e.target.value)}}
                                 endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton
                                     aria-label="toggle password visibility"
-                                    // onClick={handleClickShowPassword}
-                                    // onMouseDown={handleMouseDownPassword}
                                     edge="end"
                                     >
-                                    {/* {values.showPassword ? <VisibilityOff /> : <Visibility />} */}
                                     </IconButton>
                                 </InputAdornment>
                                 }
@@ -91,7 +115,7 @@ const User_Registration = () => {
                             />
                     </FormControl>             
                 </div>
-                <div className="Button_area">
+                <div className="Button_area" onClick={Signup_click}>
                     <Button variant="contained" disableElevation sx={{fontSize : 20, width : '47ch', height : 70}}>회원가입</Button>
                 </div>
             </div>
